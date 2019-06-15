@@ -1,0 +1,36 @@
+html(lang='en')
+	head
+		meta(charset='UTF-8')
+		meta(name='viewport', content='width=device-width,initial-scale=1.0')
+		meta(http-equiv='X-UA-Compatible', content='ie=edge')
+		title VENDOR PAYMENT
+		link(rel='stylesheet', type='text/css', href='/bootstrap.css')
+		script(type='text/javascript', src='/jquery.js')
+		script(type='text/javascript', src='/bootstrap.min.js')
+	body
+		main
+		.row.justify-content-center
+			.col-lg-6.container3.text-white.p-5
+				.container4
+					h3.text-center
+			h3
+				Pay Your Suppliers
+					form(name='myForm', action='/paystack/pay',method='POST')
+						input#name(type='text', name='full_name', placeholder='Full Nname')
+						hr
+						input#email(type='email', name='email', placeholder='Email')
+						hr
+						select(name='amount')
+							option Select Amount
+							option(value='500') 500
+							option(value='1000') 1000
+							option(value='2000') 2000
+
+						select(name='bank')
+							option Select Bank
+							each val in bankData
+								option(value=val.code) #{val.name}
+						
+
+						.bttn.pt-2
+						button(type='submit') PAY
