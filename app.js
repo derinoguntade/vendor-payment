@@ -4,8 +4,10 @@ const bodyParser = require('body-parser');
 const pug = require('pug');
 const _ = require('lodash');
 const path = require('path');
-const {Payer} = require('./models/payer')
-const {initializePayment, verifyPayment, listBanks} = require('./config/paystack')(request);
+const {Payer} = require('./models/payer');
+
+const {Recipient} = require('./models/recipient');
+const {initializePayment, verifyPayment, listBanks, createTransferRecipient, listRecipients, initiateTransfer, finalizeTransfer} = require('./config/paystack')(request);
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -31,6 +33,22 @@ app.get("/",(req, res) => {
     });
 });
 
+app.get("/create",(req, res) => {
+	listBanks((error, body)=>{
+        if(error){
+            //handle errors
+            console.log(error);
+            return;
+       }
+       response = JSON.parse(body); //converts response body to JS object
+       //console.log(response);
+       const bankData = response.data;
+       //console.log(bankData);
+       res.render("create.pug", {bankData});
+       //res.redirect(response.data.authorization_url)//picks auth url & redirects to paystack
+    });
+});
+
 //listen for app
 app.listen(port, () => {
 	console.log(`App running on port ${port}`)
@@ -52,6 +70,38 @@ app.post("/paystack/pay", (req, res) => {
        response = JSON.parse(body); //converts response body to JS object
        res.redirect(response.data.authorization_url)//picks auth url & redirects to paystack
     });
+});
+
+app.post("/create-recipient", (req, res) => {
+	//pick function selects some fields from the request body
+    const form = _.pick(req.body,["account_number","name","bank_code","type","currency"]);
+    //form.amount *= 100;
+    form.type="nuban";
+    form.currency="NGN";
+    //form.account_name=form.name;
+    
+	createTransferRecipient(form, (error, body)=>{
+        if(error){
+            //handle errors
+            console.log(error);
+            return;
+       }
+       response = JSON.parse(body); //converts response body to JS object
+    });res.redirect("/create");
+});
+
+app.get("/transfer", (req, res) => {
+	listRecipients((error, body)=>{
+        	if(error){
+            	//handle errors
+          		console.log(error);
+          		return;
+       		}
+       		response = JSON.parse(body); //converts response body to JS object
+       		const recipientData = response.data;
+       		console.log(recipientData);
+       		res.render('transfer.pug',{recipientData});
+   	});
 });
 
 app.get("/error", (req, res)=>{

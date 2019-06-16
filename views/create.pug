@@ -1,0 +1,33 @@
+html(lang='en')
+	head
+		meta(charset='UTF-8')
+		meta(name='viewport', content='width=device-width,initial-scale=1.0')
+		meta(http-equiv='X-UA-Compatible', content='ie=edge')
+		title VENDOR PAYMENT
+		link(rel='stylesheet', type='text/css', href='/bootstrap.css')
+		script(type='text/javascript', src='/jquery.js')
+		script(type='text/javascript', src='/bootstrap.min.js')
+	body
+		main
+		.row.justify-content-center
+			.col-lg-6.container3.text-white.p-5
+				.container4
+					h3.text-center
+			h3
+				Add Your Transfer Recipient 
+					form(name='createForm', action='/create-recipient',method='POST')
+						input#number(type='text', name='account_number', placeholder='Account Number')
+						hr
+						input#name(type='text', name='name', placeholder='Account Name')
+						hr
+						input#amount(type='text', name='amount', placeholder='Amount')
+						hr
+
+						select(name='bank_code')
+							option Select Bank
+							each val in bankData
+								option(value=val.code) #{val.name}
+						
+
+						.bttn.pt-2
+						button(type='submit') Save
