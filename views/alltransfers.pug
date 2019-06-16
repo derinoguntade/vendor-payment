@@ -1,0 +1,18 @@
+extends layout
+block content
+		main
+			h3 All Transactions
+					<br/><br/>
+
+						table.table-bordered
+							tr
+								th Status
+								th Name
+								th Amount
+								th Reason
+							each t in allTransferData
+								tr
+									td= t.status
+									td= t.recipient.name
+									td= t.currency+' '+t.amount/100
+									td= t.reason

@@ -1,13 +1,7 @@
-html(lang='en')
-	head
-		meta(charset='UTF-8')
-		meta(name='viewport', content='width=device-width,initial-scale=1.0')
-		meta(http-equiv='X-UA-Compatible', content='ie=edge')
-		title VENDOR PAYMENT
-		link(rel='stylesheet', type='text/css', href='/bootstrap.css')
-		script(type='text/javascript', src='/jquery.js')
-		script(type='text/javascript', src='/bootstrap.min.js')
-	body
+extends layout
+block content
 		main
-			h3
-				sorry your payment was not successful 
+			h3 Sorry, your payment was not successful. 
+				if message
+					= message
+

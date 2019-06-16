@@ -1,23 +1,5 @@
 const paystack = (request) => {
     const MySecretKey = 'Bearer sk_test_bb96935630fc24e527e8aad0e14a2e9165018894';
-    
-    //initializePayment initializes a paystack transaction and returns request response (an auth url or error)
-    const initializePayment = (form, mycallback) => {
-   		const options = {
-        	url : 'https://api.paystack.co/transaction/initialize',
-      		headers : {
-           	 authorization: MySecretKey,
-           	 'content-type': 'application/json',
-           	 'cache-control': 'no-cache'
-        	},
-       		form//contains the full name, email, amount, etc for transaction//this data is being captured by the endpoint
-   		 }
-  		const callback = (error, response, body)=>{
-       		return mycallback(error, body);
-    	}
-    	
-    	request.post(options,callback); //request method to initialize a POST request
-	}
 
   const createTransferRecipient = (form, mycallback) => {
       const options = {
@@ -85,6 +67,20 @@ const paystack = (request) => {
       
       request.post(options,callback); //request method to initialize a POST request
   }
+    const listTransfers = (mycallback) => {
+      const options = {
+          url : 'https://api.paystack.co/transfer',
+          headers : {
+             authorization: MySecretKey,
+             'content-type': 'application/json',
+             'cache-control': 'no-cache'
+          }
+      }
+      const callback = (error, response, body)=>{
+          return mycallback(error, body);
+      }
+      request.get(options,callback); //request method to initialize a POST request
+  }
 
     const listBanks = (mycallback) => {
       const options = {
@@ -99,6 +95,23 @@ const paystack = (request) => {
           return mycallback(error, body);
       }
       request.get(options,callback); //request method to initialize a POST request
+  }
+//initializePayment initializes a paystack transaction and returns request response (an auth url or error)
+    /*const initializePayment = (form, mycallback) => {
+      const options = {
+          url : 'https://api.paystack.co/transaction/initialize',
+          headers : {
+             authorization: MySecretKey,
+             'content-type': 'application/json',
+             'cache-control': 'no-cache'
+          },
+          form//contains the full name, email, amount, etc for transaction//this data is being captured by the endpoint
+       }
+      const callback = (error, response, body)=>{
+          return mycallback(error, body);
+      }
+      
+      request.post(options,callback); //request method to initialize a POST request
   }
 
   	const verifyPayment = (ref,mycallback) => {
@@ -115,8 +128,8 @@ const paystack = (request) => {
     	}
     	//get method by default
     	request(options,callback);
-   }
-   return {initializePayment, verifyPayment, listBanks, createTransferRecipient, listRecipients, initiateTransfer, finalizeTransfer};
+   }*/
+   return {listBanks, createTransferRecipient, listRecipients, initiateTransfer, finalizeTransfer, listTransfers};
 }
 
 module.exports = paystack

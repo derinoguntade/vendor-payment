@@ -1,0 +1,17 @@
+extends layout
+block content
+		main
+			h3.text-center
+			h3 Enter OTP
+					<br/>
+					
+					.createsize
+					form(name='finalizeTransfer', action='/transfer/complete/'+transfer_code,method='POST')
+						
+						input#amount(type='text', name='otp', placeholder='OTP')
+						hr
+						
+						<br/>
+
+						.bttn.pt-2
+						button(type='submit') Pay

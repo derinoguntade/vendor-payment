@@ -1,32 +1,22 @@
-html(lang='en')
-	head
-		meta(charset='UTF-8')
-		meta(name='viewport', content='width=device-width,initial-scale=1.0')
-		meta(http-equiv='X-UA-Compatible', content='ie=edge')
-		title VENDOR PAYMENT
-		link(rel='stylesheet', type='text/css', href='/bootstrap.css')
-		script(type='text/javascript', src='/jquery.js')
-		script(type='text/javascript', src='/bootstrap.min.js')
-	body
+extends layout
+block content
 		main
-		.row.justify-content-center
-			.col-lg-6.container3.text-white.p-5
-				.container4
-					h3.text-center
-			h3
-				Pay Your Supplier 
-					<br/>
+			h3.text-center
+			h3 Pay Vendors 
+				<br/><br/>
+
+				.createsize
 					form(name='initiateTransfer', action='/transfer/initiate',method='POST')
-						
 						input#amount(type='text', name='amount', placeholder='Amount')
 						hr
 						input#name(type='text', name='reason', placeholder='Reason')
 						hr
 
 						select(name='recipient')
-							option Select Supplier
+							option Select Vendor
 							each val in recipientData
 								option(value=val.recipient_code) #{val.name}
 						<br/>
+
 						.bttn.pt-2
 						button(type='submit') Pay

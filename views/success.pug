@@ -1,13 +1,13 @@
-html(lang='en')
-	head
-		meta(charset='UTF-8')
-		meta(name='viewport', content='width=device-width,initial-scale=1.0')
-		meta(http-equiv='X-UA-Compatible', content='ie=edge')
-		title VENDOR PAYMENT
-		link(rel='stylesheet', type='text/css', href='/bootstrap.css')
-		script(type='text/javascript', src='/jquery.js')
-		script(type='text/javascript', src='/bootstrap.min.js')
-	body
+extends layout
+block content
 		main
 			h3
-				#{payer.full_name} your payment of NGN #{payer.amount/100} was successful
+				Transfer Complete!
+
+			.createsize
+			h3 Your payment of NGN #{amount/100} was successful
+				<br/>
+				<br/>
+
+				a(href="../../AllTransfers")
+					button(type="button") View All Transfers
