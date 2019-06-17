@@ -15,21 +15,22 @@ app.use(express.static(path.join(__dirname, "style/")));//for css, js files
 app.set("view engine", pug);
 
 //landing page -> index.pug view
-/*app.get("/",(req, res) => {
-	listBanks((error, body)=>{
-        if(error){
-            //handle errors
-            console.log(error);
-            return;
-       }
-       response = JSON.parse(body); //converts response body to JS object
-       //console.log(response);
-       const bankData = response.data;
-       //console.log(bankData);
-       res.render("index.pug", {bankData});
-       //res.redirect(response.data.authorization_url)//picks auth url & redirects to paystack
-    });
-});*/
+app.get("/",(req, res) => {
+		listRecipients((error, body)=>{
+        	if(error){
+            	//handle errors
+          		console.log(error);
+          		return;
+       		}
+       		response = JSON.parse(body); //converts response body to JS object
+       		const recipientData = response.data;
+       		//console.log(recipientData);
+       		const message1 = "Welcome to VenPay";
+       		const message2 = "Add CakeHaven's vendor accounts & pay vendors on the go!";
+       		//res.send();
+       		res.render('transfer.pug',{recipientData, message1, message2});
+   	});
+});
 
 app.get("/create",(req, res) => {
 	listBanks((error, body)=>{
@@ -71,7 +72,7 @@ app.post("/create-recipient", (req, res) => {
     });res.redirect("/create");
 });
 
-app.get("/", (req, res) => {
+app.get("/transfer", (req, res) => {
 	listRecipients((error, body)=>{
         	if(error){
             	//handle errors

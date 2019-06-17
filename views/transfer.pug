@@ -1,7 +1,12 @@
 extends layout
 block content
 		main
-			h3.text-center
+			if(message1)
+				h1.card-title.text-center #{message1}
+				<br/>
+				h3.card-subtitle.mb-2.text-center.text-muted #{message2}
+				<br/><hr/><br/>
+
 			h3 Pay Vendors 
 				<br/><br/>
 
