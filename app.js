@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "style/")));//for css, js files
 app.set("view engine", pug);
 
 //landing page -> index.pug view
-app.get("/",(req, res) => {
+/*app.get("/",(req, res) => {
 	listBanks((error, body)=>{
         if(error){
             //handle errors
@@ -29,7 +29,7 @@ app.get("/",(req, res) => {
        res.render("index.pug", {bankData});
        //res.redirect(response.data.authorization_url)//picks auth url & redirects to paystack
     });
-});
+});*/
 
 app.get("/create",(req, res) => {
 	listBanks((error, body)=>{
@@ -71,7 +71,7 @@ app.post("/create-recipient", (req, res) => {
     });res.redirect("/create");
 });
 
-app.get("/transfer", (req, res) => {
+app.get("/", (req, res) => {
 	listRecipients((error, body)=>{
         	if(error){
             	//handle errors
