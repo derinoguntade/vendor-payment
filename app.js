@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const pug = require('pug');
 const _ = require('lodash');
 const path = require('path');
+const moment = require('moment')
 //const {Payer} = require('./models/payer');
 const {listBanks, createTransferRecipient, listRecipients, initiateTransfer, finalizeTransfer, listTransfers} = require('./config/paystack')(request);
 const port = process.env.PORT || 3000;
@@ -20,6 +21,8 @@ app.get("/",(req, res) => {
         	if(error){
             	//handle errors
           		console.log(error);
+
+            	res.redirect("/error");
           		return;
        		}
        		response = JSON.parse(body); //converts response body to JS object
@@ -37,6 +40,8 @@ app.get("/create",(req, res) => {
         if(error){
             //handle errors
             console.log(error);
+
+            res.redirect("/error");
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
@@ -66,6 +71,8 @@ app.post("/create-recipient", (req, res) => {
         if(error){
             //handle errors
             console.log(error);
+
+            res.redirect("/error");
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
@@ -77,6 +84,8 @@ app.get("/transfer", (req, res) => {
         	if(error){
             	//handle errors
           		console.log(error);
+
+            	res.redirect("/error");
           		return;
        		}
        		response = JSON.parse(body); //converts response body to JS object
@@ -97,13 +106,15 @@ app.post("/transfer/initiate", (req, res) => {
         if(error){
             //handle errors
             console.log(error);
+
+            res.redirect("/error");
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
        const transfer_code = response.data.transfer_code;
        console.log(response);
        res.render('otp.pug',{transfer_code});//"/transfer/complete/"+transfer_code);
-    });//res.redirect("/create");
+    });
 });
 
 app.post("/transfer/complete/:transfer_code", (req, res) => {
@@ -117,6 +128,7 @@ app.post("/transfer/complete/:transfer_code", (req, res) => {
         if(error){
             //handle errors
             console.log(error);
+            res.redirect("/error");
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
@@ -137,77 +149,19 @@ app.get("/AllTransfers",(req, res) => {
         if(error){
             //handle errors
             console.log(error);
+            res.redirect("/error");
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
-       //console.log(response);
-       const allTransferData = response.data;
-       console.log(allTransferData);
+       const  allTransferData= response.data;
+       for (val in allTransferData) { 
+      		allTransferData[val].updatedAt = moment(allTransferData[val].updatedAt).format('LLL').toString();
+		}
+       
        res.render("alltransfers.pug", {allTransferData});
-       //res.redirect(response.data.authorization_url)//picks auth url & redirects to paystack
     });
 });
 
 app.get("/error", (req, res)=>{
     res.render('error.pug');
 });
-
-
-
-/*
-app.post("/paystack/pay", (req, res) => {
-	//pick function selects some fields from the request body
-    const form = _.pick(req.body,["amount","email","full_name"]);
-    form.metadata = {
-        full_name : form.full_name//form metadata property helps secure name on paystack
-    }
-    form.amount *= 100;//amount is in kobo
-    initializePayment(form, (error, body)=>{
-        if(error){
-            //handle errors
-            console.log(error);
-            return;
-       }
-       response = JSON.parse(body); //converts response body to JS object
-       res.redirect(response.data.authorization_url)//picks auth url & redirects to paystack
-    });
-});
-
-
-app.get("/paystack/callback", (req,res) => {
-    const ref = req.query.reference;
-
-    verifyPayment(ref, (error,body)=>{
-        if(error){
-            //handle errors 
-            console.log(error)
-            return res.redirect('/error');
-        }
-        response = JSON.parse(body);//parse body of the returned response
-        console.log(response);
-        const data = _.at(response.data, ['reference', 'amount','customer.email', 'metadata.full_name']);
-        [reference, amount, email, full_name] = data;
-        newPayer = {reference, amount, email, full_name}
-        const payer = new Payer(newPayer)//payer mongoose model object
-        payer.save().then((payer)=>{//persist data in db
-            if(payer){
-                res.redirect("/receipt/"+payer._id);
-            }
-        }).catch((e)=>{
-            res.redirect("/error");
-        })
-    })
-});
-
-app.get('/receipt/:id', (req, res)=>{
-    const id = req.params.id;
-    Payer.findById(id).then((payer)=>{
-        if(!payer){
-            //handle error when the payer is not found
-            res.redirect('/error');
-        }
-        res.render('success.pug',{payer});
-    }).catch((e)=>{
-        res.redirect('/error');
-    })
-});*/
