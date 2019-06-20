@@ -1,8 +1,0 @@
-{
-  "status": false,
-  "message": "No Authorization Header was found"
-}--_curl_--
-"account_number":"0259450181"
---_curl_--
-"bank_code":"058"
-

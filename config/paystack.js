@@ -34,15 +34,14 @@ const paystack = (request) => {
       request.get(options,callback); //request method to initialize a GET request
   }
 
-    const deleteRecipient = (form, mycallback) => {
+    const deleteRecipient = (recipient_code_or_id, mycallback) => {
       const options = {
-          url : 'https://api.paystack.co/transferrecipient/{recipient_code_or_id}',
+          url : 'https://api.paystack.co/transferrecipient/'+recipient_code_or_id,
           headers : {
              authorization: MySecretKey,
              'content-type': 'application/json',
              'cache-control': 'no-cache'
-          },
-          form
+          }
         }
       const callback = (error, response, body)=>{
           return mycallback(error, body);

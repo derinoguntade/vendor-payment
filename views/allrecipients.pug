@@ -3,8 +3,8 @@ block content
 		main
 			h3 Vendor Management
 				<br/><br/>
-			if(message)
-			h1.card-title.text-center #{message}
+			if(messageallrec)
+			h1.card-title.text-center #{messageallrec}
 			table.table-striped
 				tr
 					th Name
@@ -19,4 +19,4 @@ block content
 						td= t.details.account_number
 						td= t.details.bank_name								
 						td  
-							a(href="../../delete/"+t.recipient_code) Delete
+							a(href="/delete/"+t.recipient_code) Delete

@@ -25,10 +25,10 @@ app.get("/",(req, res) => {
           		return;
        		}
        		response = JSON.parse(body); //converts response body to JS object
-       		const recipientData = response.data;
+       		var recipientData = response.data;
        		//console.log(recipientData);
-       		const message1 = "Welcome to VenPay";
-       		const message2 = "Add CakeHaven's vendor accounts & pay vendors on the go!";
+       		var message1 = "Welcome to VenPay";
+       		var message2 = "Add CakeHaven's vendor accounts & pay vendors on the go!";
        		//res.send();
        		res.render('transfer.pug',{recipientData, message1, message2});
    	});
@@ -43,16 +43,17 @@ app.get("/AllRecipients",(req, res) => {
           		return;
        		}
        		response = JSON.parse(body); //converts response body to JS object
-       		const recipientData = response.data;
+       		var recipientData = response.data;
        		res.render('AllRecipients.pug',{recipientData});
    	});
 });
 
-app.delete("/delete/:recipient_code_or_id",(req, res) => {
-	const recipient_code_or_id = req.params.recipient_code_or_id;
+app.get("/delete/:recipient_code",(req, res) => {
+	const recipient_code_or_id = req.params.recipient_code;
+  console.log(recipient_code_or_id);
 	//const form = _.pick(req.body,["recipient_code"]);
-	form=[recipient_code_or_id];
-		deleteRecipients(form,(error, body)=>{
+	//form=[recipient_code_or_id];
+		deleteRecipient(recipient_code_or_id,(error, body)=>{
         	if(error){
             	//handle errors
           		console.log(error);
@@ -60,14 +61,14 @@ app.delete("/delete/:recipient_code_or_id",(req, res) => {
           		return;
        		}
        		response = JSON.parse(body); //converts response body to JS object
-       		console.log(response.status);
+       		console.log(response.status+' '+response.message);
        		if(response.status==false||!response.status){
-       			const message = response.message;
+       			var message = response.message;
        			res.render('error.pug',{message});
        			return
        }
-       		const message = response.message;
-       		res.redirect('/AllRecipients',{message});
+       		//const message = response.message;
+       		res.redirect('/AllRecipients');
    	});//a(href="/delete/" + t.recipient_code) Delete
 });
 
@@ -80,7 +81,7 @@ app.get("/create",(req, res) => {
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
-       const bankData = response.data;
+       var bankData = response.data;
        res.render("create.pug", {bankData}); 
     });
 });
@@ -105,7 +106,7 @@ app.get("/confirm-recipient", (req, res) => {
        	console.log(response); 
        	if(!response.status){
        		console.log("false "+response.status);
-       		const message = response.message;
+       		var message = response.message;
        		res.render('error.pug',{message});
        		return;
        	}
@@ -129,7 +130,10 @@ app.post("/create-recipient", (req, res) => {
             		res.redirect("/error");
             		return;
        			}
-   	});res.redirect("/create");
+   	});
+   // message="You've successfully saved "+form.account_name+"'s account details!";
+    //res.send(message);
+    res.redirect("/AllRecipients");
 
 });
 
@@ -142,7 +146,7 @@ app.get("/transfer", (req, res) => {
           		return;
        		}
        		response = JSON.parse(body); //converts response body to JS object
-       		const recipientData = response.data;
+       		var recipientData = response.data;
        		console.log(recipientData);
        		res.render('transfer.pug',{recipientData});
    	});
@@ -163,7 +167,7 @@ app.post("/transfer/initiate", (req, res) => {
             return;
        }
        response = JSON.parse(body); //converts response body to JS object
-       const transfer_code = response.data.transfer_code;
+       var transfer_code = response.data.transfer_code;
        console.log(response);
        res.render('otp.pug',{transfer_code});//"/transfer/complete/"+transfer_code);
     });
@@ -184,11 +188,11 @@ app.post("/resend_otp/:transfer_code", (req, res) => {
        response = JSON.parse(body); //converts response body to JS object
        console.log(response.status);
        if(response.status==false||!response.status){
-       		const message = response.message;
+       		var message = response.message;
        		res.render('error.pug',{message});
        		return
        }
-       message=response.message;
+       var message=response.message;
        res.render('otp.pug',{transfer_code,message});//"/transfer/complete/"+transfer_code);
     });
 });
@@ -210,7 +214,7 @@ app.post("/transfer/complete/:transfer_code", (req, res) => {
        response = JSON.parse(body); //converts response body to JS object
        console.log(response.status);
        if(response.status==false||!response.status){
-       		const message = response.message;
+       		var message = response.message;
        		res.render('error.pug',{message});
        		return
        }

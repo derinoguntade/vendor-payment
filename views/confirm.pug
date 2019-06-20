@@ -3,8 +3,8 @@ block content
 		main
 			h3 Confirm Vendor Details
 				<br/><br/>
-			if(message)
-			h3.card-title.text-center #{message}
+			if(messageconfirm)
+			h3.card-title.text-center #{messageconfirm}
 			.createsize
 				form(name='confirmRecipient', action='/create-recipient',method='POST')
 					label(for='account_name') Account Name:
