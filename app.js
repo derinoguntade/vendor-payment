@@ -4,18 +4,23 @@ const bodyParser = require('body-parser');
 const pug = require('pug');
 const _ = require('lodash');
 const path = require('path');
-const moment = require('moment')
-//const {Payer} = require('./models/payer');
+const moment = require('moment');
+
 const {listBanks, resend_otp, createTransferRecipient, deleteRecipient, resolveAccountNo, listRecipients, initiateTransfer, finalizeTransfer, listTransfers} = require('./config/paystack')(request);
 const port = process.env.PORT || 3000;
-
 const app = express();
+
 app.use(bodyParser.json());//uses bodyparser middleware (on this pipeline) to auto convert request body to JS object
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, "style/")));//for css, js files
 app.set("view engine", pug);
 
-//landing page -> index.pug view
+//listen for app
+app.listen(port, () => {
+  console.log(`App running on port ${port}`)
+});
+
+//landing page -> login.pug view
 app.get("/",(req, res) => {
 		listRecipients((error, body)=>{
         	if(error){
@@ -44,7 +49,7 @@ app.get("/AllRecipients",(req, res) => {
        		}
        		response = JSON.parse(body); //converts response body to JS object
        		var recipientData = response.data;
-       		res.render('AllRecipients.pug',{recipientData});
+       		res.render('allrecipients.pug',{recipientData});
    	});
 });
 
@@ -86,11 +91,6 @@ app.get("/create",(req, res) => {
     });
 });
 
-//listen for app
-app.listen(port, () => {
-	console.log(`App running on port ${port}`)
-});
-
 app.get("/confirm-recipient", (req, res) => {
    	account_number=req.query.account_number;
     bank_code=req.query.bank_code; 
@@ -130,10 +130,9 @@ app.post("/create-recipient", (req, res) => {
             		res.redirect("/error");
             		return;
        			}
+
+      res.redirect("/AllRecipients");
    	});
-   // message="You've successfully saved "+form.account_name+"'s account details!";
-    //res.send(message);
-    res.redirect("/AllRecipients");
 
 });
 
