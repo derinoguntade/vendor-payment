@@ -6,12 +6,19 @@ block content
 					<br/>
 					
 					.createsize
+					if message
+						=message
+						<br/>
 					form(name='finalizeTransfer', action='/transfer/complete/'+transfer_code,method='POST')
 						
 						input#amount(type='text', name='otp', placeholder='OTP')
 						hr
 						
 						<br/>
-
-						.bttn.pt-2
+						.bttn.pt-6 
 						button(type='submit') Pay
+
+					form(name='resendOTP', action='../../resend_otp/'+transfer_code,method='POST')
+						.bttn.pt-6
+						button(type='submit') Resend OTP
+						

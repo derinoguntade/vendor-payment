@@ -1,0 +1,22 @@
+extends layout
+block content
+		main
+			h3 Vendor Management
+				<br/><br/>
+			if(message)
+			h1.card-title.text-center #{message}
+			table.table-striped
+				tr
+					th Name
+					th Account Name
+					th Account Number
+					th Bank
+					th Delete
+				each t in recipientData				
+					tr
+						td= t.name
+						td= t.details.account_name
+						td= t.details.account_number
+						td= t.details.bank_name								
+						td  
+							a(href="../../delete/"+t.recipient_code) Delete

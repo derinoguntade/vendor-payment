@@ -20,8 +20,9 @@ block content
 						select(name='recipient')
 							option Select Vendor
 							each val in recipientData
-								option(value=val.recipient_code) #{val.name} - #{val.details.account_number} - #{val.details.bank_name}
+								option(value=val.recipient_code) #{val.details.account_name} - #{val.details.account_number} - #{val.details.bank_name}
 						<br/>
 
 						.bttn.pt-2
 						button(type='submit') Pay
+						

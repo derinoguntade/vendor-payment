@@ -1,0 +1,23 @@
+extends layout
+block content
+		main
+			h3 Confirm Vendor Details
+				<br/><br/>
+			if(message)
+			h3.card-title.text-center #{message}
+			.createsize
+				form(name='confirmRecipient', action='/create-recipient',method='POST')
+					label(for='account_name') Account Name:
+					
+					input#account_name(type='text', value=confirmedrecipient.account_name, name='account_name', readonly=ro) 
+					<br/><br/>
+
+					label(for='account_number') Account Number:
+					input#account_number(type='text', value=confirmedrecipient.account_number, name='account_number', readonly=ro) 
+				
+					input#bank_code(type='hidden', value=confirmedrecipient.bank_code, name='bank_code') 
+					<br/>
+			
+					.bttn.pt-2
+					button(type='submit') Confirm
+							
